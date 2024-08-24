@@ -34,14 +34,12 @@ end
 -- Process command line arguments
 local files = {}
 local options = {}
-local outputFilePath = nil
-local mainFilePath = nil
 
 for i = 1, #arg do
     if arg[i]:match("^--output=") then
-        outputFilePath = arg[i]:sub(10)
+        options.outputFilePath = arg[i]:sub(10)
     elseif arg[i]:match("^--main=") then
-        mainFilePath = arg[i]:sub(8)
+        options.mainFilePath = arg[i]:sub(8)
     elseif arg[i]:match("^--title=") then
         options.title = arg[i]:sub(9)
     elseif arg[i]:match("^--author=") then
@@ -69,13 +67,13 @@ local concatenatedContent = readAndConcatenateFiles(files)
 local header = generateHeader(options)
 
 -- Append main file content if specified
-if mainFilePath then
-    local mainFile = io.open(mainFilePath, "r")
+if options.mainFilePath then
+    local mainFile = io.open(options.mainFilePath, "r")
     if mainFile then
         concatenatedContent = concatenatedContent .. mainFile:read("*a")  -- Read and append the entire content of the main file
         mainFile:close()
     else
-        print("Failed to open main file " .. mainFilePath)
+        print("Failed to open main file " .. options.mainFilePath)
     end
 end
 
@@ -83,14 +81,14 @@ end
 concatenatedContent = header .. concatenatedContent
 
 -- Check if output to file is requested
-if outputFilePath then
-    local outFile = io.open(outputFilePath, "w")
+if options.outputFilePath then
+    local outFile = io.open(options.outputFilePath, "w")
     if outFile then
         outFile:write(concatenatedContent)
         outFile:close()
-        print("Output written to " .. outputFilePath)
+        print("Output written to " .. options.outputFilePath)
     else
-        print("Failed to open output file " .. outputFilePath)
+        print("Failed to open output file " .. options.outputFilePath)
     end
 else
     -- Print the concatenated contents to standard output if no output file specified
