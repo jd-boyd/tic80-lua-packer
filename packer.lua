@@ -8,11 +8,12 @@ local function printHelp()
     print("  --site=URL             Sets the website URL of the project (optional)")
     print("  --license=LICENSE      Sets the license of the project (optional)")
     print("  --version=VERSION      Sets the version number of the project (optional)")
-    print("  --output=FILEPATH      Specifies the output file path (optional)")
-    print("  --main=FILEPATH        Specifies a main file to be appended without modifications (optional)")
+    print("  --output=FILEPATH      Specifies the file path where the output will be written (optional)")
+    print("  --main=FILEPATH        Specifies a main file to be appended at the end without additional formatting (optional)")
+    print("  --assets=FILEPATH      Specifies an assets file. Content below '-- <TILES>' in this file will be appended at the end of the output (optional)")
     print("  --help                 Displays this help message")
     print("\nExample:")
-    print("  lua script_name.lua --title=\"Project Title\" --author=\"Your Name\" file1.txt file2.txt --output=output.txt")
+    print("  lua script_name.lua --title=\"Project Title\" --author=\"Your Name\" --output=output.txt --assets=assets.txt file1.txt file2.txt")
 end
 
 -- Function to generate metadata header based on command line flags
