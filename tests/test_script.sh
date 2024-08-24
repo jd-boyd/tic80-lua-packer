@@ -33,10 +33,10 @@ run_test() {
 }
 
 # Test cases
-run_test "Basic Test with Title" "--title='Test Project' file1.txt file2.txt" "$OUTPUT_DIR/output1.txt" 0
-run_test "Test with Assets" "--title='Test Project' --assets='assets.txt' file1.txt file2.txt --output=$OUTPUT_DIR/output2.txt" 0
-run_test "Test with Main" "--title='Test Project' --main='main.lua' file1.txt file2.txt --output=$OUTPUT_DIR/output3.txt" 0
-run_test "Full Feature Test" "--title='Full Feature' --author='Author' --desc='Description' --site='https://example.com' --license='MIT' --version='1.0' --main='main.lua' --assets='assets.txt' file1.txt file2.txt --output=$OUTPUT_DIR/output4.txt" 0
+run_test "Basic Test with Title" "--title='Test Project' file1.lua file2.lua" "$OUTPUT_DIR/output1.lua" 0
+run_test "Test with Assets" "--title='Test Project' --assets='assets.lua' file1.lua file2.lua --output=$OUTPUT_DIR/output2.lua" 0
+run_test "Test with Main" "--title='Test Project' --main='main.lua' file1.lua file2.lua --output=$OUTPUT_DIR/output3.lua" 0
+run_test "Full Feature Test" "--title='Full Feature' --author='Author' --desc='Description' --site='https://example.com' --license='MIT' --version='1.0' --main='main.lua' --assets='assets.lua' file1.lua file2.lua --output=$OUTPUT_DIR/output4.lua" 0
 
 # Final script exit status check
 if [ $overall_status -ne 0 ]; then

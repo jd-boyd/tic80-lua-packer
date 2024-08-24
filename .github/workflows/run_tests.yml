@@ -23,4 +23,5 @@ jobs:
       - name: Run Test Script
         run: |
           chmod +x tests/test_script.sh
-          tests/test_script.sh
+          cd tests
+          ./test_script.sh
