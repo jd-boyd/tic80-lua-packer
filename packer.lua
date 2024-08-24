@@ -1,8 +1,7 @@
--- Variable to hold the concatenated content
-local concatenatedContent = ""
-
 -- Function to read and concatenate file contents with custom lines
 local function readAndConcatenateFiles(fileList)
+    local concatenatedContent = ""  -- Initialize the variable to hold the concatenated content locally
+
     for _, file in ipairs(fileList) do
         local f = io.open(file, "r")  -- Open the file for reading
         if f then  -- If the file exists and is open
@@ -16,17 +15,36 @@ local function readAndConcatenateFiles(fileList)
             print("Failed to open " .. file)
         end
     end
+
+    return concatenatedContent
 end
 
--- Collect files from command line arguments
+-- Process command line arguments
 local files = {}
+local outputFilePath = nil
+
 for i = 1, #arg do
-    table.insert(files, arg[i])
+    if arg[i]:match("^--output=") then
+        outputFilePath = arg[i]:sub(10)
+    else
+        table.insert(files, arg[i])
+    end
 end
 
--- Call the function with the list of files provided as command line arguments
-readAndConcatenateFiles(files)
+-- Call the function with the list of files
+local concatenatedContent = readAndConcatenateFiles(files)
 
--- Print the concatenated contents
-print(concatenatedContent)
-
+-- Check if output to file is requested
+if outputFilePath then
+    local outFile = io.open(outputFilePath, "w")
+    if outFile then
+        outFile:write(concatenatedContent)
+        outFile:close()
+        print("Output written to " .. outputFilePath)
+    else
+        print("Failed to open output file " .. outputFilePath)
+    end
+else
+    -- Print the concatenated contents to standard output if no output file specified
+    print(concatenatedContent)
+end
