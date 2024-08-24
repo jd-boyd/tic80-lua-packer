@@ -27,6 +27,26 @@ local function generateHeader(options)
     return header
 end
 
+-- Function to append assets from a specified file
+local function appendAssets(filePath)
+    local assetsContent = ""
+    local copy = false
+    local f = io.open(filePath, "r")  -- Open the assets file for reading
+    if f then
+        for line in f:lines() do
+            if line == "-- <TILES>" or copy then
+                copy = true  -- Start copying from the line where -- <TILES> is found
+                assetsContent = assetsContent .. line .. "\n"
+            end
+        end
+        f:close()
+    else
+        print("Failed to open assets file: " .. filePath)
+    end
+    return assetsContent
+end
+
+
 -- Function to read and concatenate file contents with custom lines
 local function readAndConcatenateFiles(fileList)
     local concatenatedContent = ""  -- Initialize the variable to hold the concatenated content locally
@@ -59,21 +79,23 @@ for i = 1, #arg do
     elseif arg[i]:match("^--output=") then
         options.outputFilePath = arg[i]:sub(10)
     elseif arg[i]:match("^--main=") then
-        options.mainFilePath = arg[i]:sub(8)
+       options.mainFilePath = arg[i]:sub(8)
+    elseif arg[i]:match("^--assets=") then
+       options.assetsFilePath = arg[i]:sub(10)
     elseif arg[i]:match("^--title=") then
-        options.title = arg[i]:sub(9)
+       options.title = arg[i]:sub(9)
     elseif arg[i]:match("^--author=") then
-        options.author = arg[i]:sub(10)
+       options.author = arg[i]:sub(10)
     elseif arg[i]:match("^--desc=") then
-        options.desc = arg[i]:sub(8)
+       options.desc = arg[i]:sub(8)
     elseif arg[i]:match("^--site=") then
-        options.site = arg[i]:sub(8)
+       options.site = arg[i]:sub(8)
     elseif arg[i]:match("^--license=") then
-        options.license = arg[i]:sub(11)
+       options.license = arg[i]:sub(11)
     elseif arg[i]:match("^--version=") then
-        options.version = arg[i]:sub(11)
+       options.version = arg[i]:sub(11)
     else
-        table.insert(files, arg[i])
+       table.insert(files, arg[i])
     end
 end
 
@@ -104,6 +126,12 @@ end
 
 -- Combine header with the concatenated content
 concatenatedContent = header .. concatenatedContent
+
+-- Append assets content if specified
+if options.assetsFilePath then
+    local assetsContent = appendAssets(options.assetsFilePath)
+    concatenatedContent = concatenatedContent .. assetsContent  -- Append the assets content to the output
+end
 
 -- Check if output to file is requested
 if options.outputFilePath then
