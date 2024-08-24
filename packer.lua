@@ -1,3 +1,15 @@
+-- Function to generate metadata header based on command line flags
+local function generateHeader(options)
+    local header = ""
+    if options.title then header = header .. "-- title:   " .. options.title .. "\n" end
+    if options.author then header = header .. "-- author:  " .. options.author .. "\n" end
+    if options.desc then header = header .. "-- desc:    " .. options.desc .. "\n" end
+    if options.site then header = header .. "-- site:    " .. options.site .. "\n" end
+    if options.license then header = header .. "-- license: " .. options.license .. "\n" end
+    if options.version then header = header .. "-- version: " .. options.version .. "\n" end
+    return header
+end
+
 -- Function to read and concatenate file contents with custom lines
 local function readAndConcatenateFiles(fileList)
     local concatenatedContent = ""  -- Initialize the variable to hold the concatenated content locally
@@ -21,18 +33,54 @@ end
 
 -- Process command line arguments
 local files = {}
+local options = {}
 local outputFilePath = nil
+local mainFilePath = nil
 
 for i = 1, #arg do
     if arg[i]:match("^--output=") then
         outputFilePath = arg[i]:sub(10)
+    elseif arg[i]:match("^--main=") then
+        mainFilePath = arg[i]:sub(8)
+    elseif arg[i]:match("^--title=") then
+        options.title = arg[i]:sub(9)
+    elseif arg[i]:match("^--author=") then
+        options.author = arg[i]:sub(10)
+    elseif arg[i]:match("^--desc=") then
+        options.desc = arg[i]:sub(8)
+    elseif arg[i]:match("^--site=") then
+        options.site = arg[i]:sub(8)
+    elseif arg[i]:match("^--license=") then
+        options.license = arg[i]:sub(11)
+    elseif arg[i]:match("^--version=") then
+        options.version = arg[i]:sub(11)
     else
         table.insert(files, arg[i])
     end
 end
 
+if not options.title then
+    print("Error: --title flag is required")
+    return
+end
+
 -- Call the function with the list of files
 local concatenatedContent = readAndConcatenateFiles(files)
+local header = generateHeader(options)
+
+-- Append main file content if specified
+if mainFilePath then
+    local mainFile = io.open(mainFilePath, "r")
+    if mainFile then
+        concatenatedContent = concatenatedContent .. mainFile:read("*a")  -- Read and append the entire content of the main file
+        mainFile:close()
+    else
+        print("Failed to open main file " .. mainFilePath)
+    end
+end
+
+-- Combine header with the concatenated content
+concatenatedContent = header .. concatenatedContent
 
 -- Check if output to file is requested
 if outputFilePath then
