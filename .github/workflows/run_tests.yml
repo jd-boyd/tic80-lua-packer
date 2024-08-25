@@ -22,6 +22,5 @@ jobs:
 
       - name: Run Test Script
         run: |
-          chmod +x tests/test_script.sh
           cd tests
-          ./test_script.sh
+          lua ./test_script.lua

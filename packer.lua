@@ -25,6 +25,7 @@ local function generateHeader(options)
     if options.site then header = header .. "-- site:    " .. options.site .. "\n" end
     if options.license then header = header .. "-- license: " .. options.license .. "\n" end
     if options.version then header = header .. "-- version: " .. options.version .. "\n" end
+    header = header .. "\n\n"
     return header
 end
 
@@ -109,6 +110,8 @@ if not options.title then
     print("Error: --title flag is required")
     return
 end
+
+
 
 -- Call the function with the list of files
 local concatenatedContent = readAndConcatenateFiles(files)
