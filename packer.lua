@@ -13,7 +13,7 @@ local function printHelp()
     print("  --assets=FILEPATH      Specifies an assets file. Content below '-- <TILES>' in this file will be appended at the end of the output (optional)")
     print("  --help                 Displays this help message")
     print("\nExample:")
-    print("  lua script_name.lua --title=\"Project Title\" --author=\"Your Name\" --output=output.txt --assets=assets.txt file1.txt file2.txt")
+    print("  lua script_name.lua --title=\"Project Title\" --author=\"Your Name\" --output=output.lua --assets=assets.lua file1.lua file2.lua")
 end
 
 -- Function to generate metadata header based on command line flags
