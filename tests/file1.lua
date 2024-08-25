@@ -1,3 +1,3 @@
-return function hello()
+return function() 
     return "Hello from file1!"
 end

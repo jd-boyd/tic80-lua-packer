@@ -1,6 +1,6 @@
 -- main.lua
 local hello = require("file1")
-local goodbyd = require("file2")
+local goodbye = require("file2")
 
 print(hello())
 print(goodbye())
